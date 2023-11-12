@@ -8,7 +8,9 @@ namespace pchela2._0_case.Controllers
 {
     public class HomeController : Controller
     {
-        
+        //string connString = "Host=localhost;Port=5432;Database=pchela2;Username=pchela2;Password=pchela;";
+        //string connString = "Host=95.164.11.251;Port=5432;Username=nelogeek;Password=nel9856;Database=pchela2db;";
+
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
 
@@ -42,7 +44,15 @@ namespace pchela2._0_case.Controllers
         {
             var clientData = new List<Client>();
 
-            using (var connection = new NpgsqlConnection("Host=localhost;Port=5432;Database=pchela2;Username=pchela2;Password=pchela;"))
+            
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
+
+            string connectionString = configuration.GetConnectionString("nelConnString");
+
+           
+            using (var connection = new NpgsqlConnection(connectionString))
             {
                 connection.Open();
 
@@ -100,10 +110,16 @@ namespace pchela2._0_case.Controllers
         {
             List<Client> clients = new List<Client>();
 
-            
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
+
+            string connectionString = configuration.GetConnectionString("nelConnString");
+
+
             try
             {
-                using (NpgsqlConnection connection = new NpgsqlConnection("Host=localhost;Port=5432;Database=pchela2;Username=pchela2;Password=pchela;"))
+                using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
                 {
                     connection.Open();
 
